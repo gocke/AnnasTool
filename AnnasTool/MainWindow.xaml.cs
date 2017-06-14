@@ -26,13 +26,20 @@ namespace AnnasTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        private byte[] cipherKey = null;
+        private byte[] cipher = null;
         private int cipherStart = 0;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            cipher = LoadCipher();
+            cipherStart = LoadCipherStart();
         }
+
+        ///
+        /// Encryption Decryption
+        /// 
 
 
         private string Encrypt(string inputText)
@@ -40,13 +47,15 @@ namespace AnnasTool
             string plainText = inputText;
             byte[] plainTextBytes = Encoding.ASCII.GetBytes(plainText);
 
-            if (cipherKey == null || cipherKey.Length < plainTextBytes.Length)
+            if (cipher == null || cipher.Length - cipherStart < plainTextBytes.Length)
             {
                 MessageBox.Show("Cipherkey ran out, generating new");
-                GenerateKey();
+                GenerateCipher();
             }
 
-            byte[] currentKey = new ArraySegment<byte>(cipherKey, cipherStart, plainTextBytes.Length).ToArray();
+            byte[] currentKey = new ArraySegment<byte>(cipher, cipherStart, plainTextBytes.Length).ToArray();
+            cipherStart += plainTextBytes.Length;
+            StoreCipherStart(cipherStart);
             byte[] secureTextBytes = new byte[plainTextBytes.Length];
 
             for (int i = 0; i < plainTextBytes.Length; i++)
@@ -67,13 +76,13 @@ namespace AnnasTool
             string secureText = splitArray[2];
             byte[] secureTextBytes = Convert.FromBase64String(secureText);
 
-            if (cipherKey == null || cipherKey.Length < secureTextBytes.Length)
+            if (cipher == null || cipher.Length - cipherStart < secureTextBytes.Length)
             {
                 MessageBox.Show("Cipherkey ran out. You must request a new Key and Message");
                 return "";
             }
 
-            byte[] currentKey = new ArraySegment<byte>(cipherKey, messageStart, messageLength).ToArray();
+            byte[] currentKey = new ArraySegment<byte>(cipher, messageStart, messageLength).ToArray();
             byte[] plainTextBytes = new byte[secureTextBytes.Length];
 
             for (int i = 0; i < plainTextBytes.Length; i++)
@@ -120,25 +129,58 @@ namespace AnnasTool
             return null;
         }
 
-        private void GenerateKey()
+        ///
+        /// Utility
+        /// 
+
+        private void GenerateCipher()
         {
             using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
             {
-                cipherKey = new byte[500000];
-                rng.GetBytes(cipherKey);
+                cipher = new byte[500000];
+                rng.GetBytes(cipher);
             }
 
-            File.WriteAllText("cipher.txt", Convert.ToBase64String(cipherKey));
+            File.WriteAllText("cipher.txt", Convert.ToBase64String(cipher));
+            StoreCipherStart(0);
         }
 
-        private void ImportKey()
+        private byte[] LoadCipher()
+        {
+            if (File.Exists("cipher.txt"))
+            {
+                return Convert.FromBase64String(File.ReadAllText("cipher.txt"));
+            }
+            return null;
+        }
+
+        private byte[] ImportCipher()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
-                cipherKey = Convert.FromBase64String(File.ReadAllText(openFileDialog.FileName));
+                return Convert.FromBase64String(File.ReadAllText(openFileDialog.FileName));
             }
+            return null;
         }
+
+        private void StoreCipherStart(int tempCipherStart)
+        {
+            File.WriteAllText("cipherStart.txt", tempCipherStart.ToString());
+        }
+
+        private int LoadCipherStart()
+        {
+            if (File.Exists("cipherStart.txt"))
+            {
+                return int.Parse(File.ReadAllText("cipherStart.txt"));
+            }
+            return 0;
+        }
+
+        ///
+        /// EVENTS
+        /// 
 
         private void EncryptButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -165,14 +207,14 @@ namespace AnnasTool
             }
         }
 
-        private void LoadButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            ImportKey();
-        }
-
         private void GenerateButton_OnClick(object sender, RoutedEventArgs e)
         {
-            GenerateKey();
+            GenerateCipher();
+        }
+
+        private void ImportButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ImportCipher();
         }
     }
 }

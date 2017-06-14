@@ -131,6 +131,15 @@ namespace AnnasTool
             File.WriteAllText("cipher.txt", Convert.ToBase64String(cipherKey));
         }
 
+        private void ImportKey()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                cipherKey = Convert.FromBase64String(File.ReadAllText(openFileDialog.FileName));
+            }
+        }
+
         private void EncryptButton_OnClick(object sender, RoutedEventArgs e)
         {
             OutputTextBox.Text = Encrypt(InputTextBox.Text);
@@ -158,7 +167,7 @@ namespace AnnasTool
 
         private void LoadButton_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            ImportKey();
         }
 
         private void GenerateButton_OnClick(object sender, RoutedEventArgs e)

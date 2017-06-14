@@ -16,7 +16,7 @@
                 <Button Margin="5" Click="DecryptImageButton_OnClick" Name="DecryptImageButton">Decrypt Image</Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Margin="5" Click="LoadButton_OnClick" Name="LoadButton">Load Cipher</Button>
+                <Button Margin="5" Click="LoadButton_OnClick" Name="ImportButton">Import Cipher</Button>
                 <Button Margin="5" Click="GenerateButton_OnClick" Name="GenerateButton">Generate Cipher</Button>
             </StackPanel>
             <TextBox Name="OutputTextBox" Height="250" Width="500" Focusable="True">Here could be your Text!</TextBox>

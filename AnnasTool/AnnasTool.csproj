@@ -35,8 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StegoSharp">
-      <HintPath>..\..\gocke_stego-sharp\StegoSharp\StegoSharp\bin\Debug\StegoSharp.dll</HintPath>
+    <Reference Include="StegoSharp, Version=0.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\StegoSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -99,6 +100,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="StegoSharp.dll" />
     <Content Include="test.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,0 +1,25 @@
+﻿<Window x:Class="AnnasTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AnnasTool"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="650" Width="525">
+    <Grid>
+        <StackPanel>
+            <TextBox Name="InputTextBox" Height="250" Width="500"> Here could be your Text!</TextBox>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Margin="5" Click="EncryptButton_OnClick" Name="EncryptButton">Encrypt</Button>
+                <Button Margin="5" Click="DecryptButton_OnClick" Name="DecryptButton">Decrypt</Button>
+                <Button Margin="5" Click="EncryptImageButton_OnClick" Name="EncryptImageButton">Encrypt Image</Button>
+                <Button Margin="5" Click="DecryptImageButton_OnClick" Name="DecryptImageButton">Decrypt Image</Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Margin="5" Click="LoadButton_OnClick" Name="LoadButton">Load Cipher</Button>
+                <Button Margin="5" Click="GenerateButton_OnClick" Name="GenerateButton">Generate Cipher</Button>
+            </StackPanel>
+            <TextBox Name="OutputTextBox" Height="250" Width="500" Focusable="True">Here could be your Text!</TextBox>
+        </StackPanel>
+    </Grid>
+</Window>
